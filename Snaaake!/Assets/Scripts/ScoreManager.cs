@@ -5,15 +5,15 @@ using TMPro;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
-    private int score = 0;
-    public TextMeshProUGUI scoreText; // Ensure this field is public or serialized
+    public int score = 0;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI loseText;
 
     void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // Keep the score manager between scenes
         }
         else
         {
@@ -24,12 +24,11 @@ public class ScoreManager : MonoBehaviour
     public void AddScore(int value)
     {
         score += value;
-        Debug.Log("Score: " + score);
-
-        // Update the UI
+        
         if (scoreText != null)
         {
             scoreText.text = "Score: " + score;
+            loseText.text = "Score: " + score;
         }
     }
 

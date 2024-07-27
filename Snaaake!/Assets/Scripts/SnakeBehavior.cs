@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
@@ -12,27 +11,54 @@ public class SnakeBehavior : MonoBehaviour
     [SerializeField] private KeyCode _leftDirection;
     [SerializeField] private KeyCode _rightDirection;
     
-    private AudioSource _source;
+    private AudioSource[] _sources;
     [SerializeField] AudioClip lose;
-
-    [Range(0.0167f, 0.09342f)] public float moveInterval = 0.09342f;
-    public float directionChangeCooldown = 0.07f; // Minimum time between direction changes
+    [SerializeField] AudioClip up;
+    [SerializeField] AudioClip down;
+    [SerializeField] AudioClip left;
+    [SerializeField] AudioClip right;
+    
+    [Range(0.0167f, 0.14f)] public float moveInterval = 0.14f;
 
     private static List<GameObject> _body = new List<GameObject>();
     private List<Vector3> _previousPositions = new List<Vector3>();
 
     public GameObject bodyPrefab;
-    public GameOverManager gameOverManager; // Reference to the Game Over Manager
+    public GameOverManager gameOverManager;
 
     private float moveTimer;
     private Vector2 _direction = Vector2.right;
-    private bool isHead;
+    private Vector2 nextDirection;
+    public bool isHead;
     private float lastDirectionChangeTime;
 
+    private bool strobeCounter;
+    private bool hasIncreasedSpeed;
+    
     private void Start()
     {
-        _source = GetComponent<AudioSource>();
-        
+        Debug.Log("SnakeBehavior Start Method Called");
+
+        _sources = GetComponents<AudioSource>();
+
+        if (_body.Count == 0)
+        {
+            isHead = true;
+            Debug.Log("This is the head segment");
+            _body.Add(gameObject);
+            _previousPositions.Add(transform.position);
+        }
+        else
+        {
+            isHead = false;
+            Debug.Log("This is not the head segment");
+        }
+    }
+
+    private void InitializeSnake()
+    {
+        _sources = GetComponents<AudioSource>();
+
         if (_body.Count == 0)
         {
             isHead = true;
@@ -44,16 +70,16 @@ public class SnakeBehavior : MonoBehaviour
             isHead = false;
         }
 
-        // Ensure the GameOverManager is assigned
-        if (gameOverManager == null)
-        {
-            Debug.LogError("GameOverManager is not assigned in the Inspector!");
-        }
+        Debug.Log($"Snake initialized. isHead: {isHead}");
     }
-
     private void Update()
     {
-        if (!isHead) return;
+        Debug.Log("SnakeBehavior Update Method Called");
+        if (!isHead)
+        {
+            Debug.Log("Not Head Segment");
+            return;
+        }
 
         HandleInput();
 
@@ -67,33 +93,57 @@ public class SnakeBehavior : MonoBehaviour
 
     private void HandleInput()
     {
-        if (Time.time - lastDirectionChangeTime >= directionChangeCooldown)
+        if (Input.GetKeyDown(_upDirection))
         {
-            if (Input.GetKeyDown(_upDirection) && (_direction != Vector2.down))
-            {
-                _direction = Vector2.up;
-                lastDirectionChangeTime = Time.time;
-            }
-            else if (Input.GetKeyDown(_downDirection) && (_direction != Vector2.up))
-            {
-                _direction = Vector2.down;
-                lastDirectionChangeTime = Time.time;
-            }
-            else if (Input.GetKeyDown(_leftDirection) && (_direction != Vector2.right))
-            {
-                _direction = Vector2.left;
-                lastDirectionChangeTime = Time.time;
-            }
-            else if (Input.GetKeyDown(_rightDirection) && (_direction != Vector2.left))
-            {
-                _direction = Vector2.right;
-                lastDirectionChangeTime = Time.time;
-            }
+            nextDirection = Vector2.up;
+            Debug.Log("up");
+        }
+
+        if (Input.GetKeyDown(_downDirection))
+        {
+            nextDirection = Vector2.down;
+            Debug.Log("down");
+        }
+
+        if (Input.GetKeyDown(_leftDirection))
+        {
+            nextDirection = Vector2.left;
+        }
+
+        if (Input.GetKeyDown(_rightDirection))
+        {
+            nextDirection = Vector2.right;
         }
     }
-
+    
     private void Move()
     {
+        Debug.Log("move being called");
+        if (nextDirection == Vector2.up && _direction != Vector2.down)
+        {
+            if (_direction != Vector2.up)
+                PlaySound(up);            
+            _direction = Vector2.up;
+        }
+        if (nextDirection == Vector2.down && _direction != Vector2.up)
+        {
+            if (_direction != Vector2.down)
+                PlaySound(down);            
+            _direction = Vector2.down;
+        }
+        if (nextDirection == Vector2.left && _direction != Vector2.right)
+        {
+            if (_direction != Vector2.left)
+                PlaySound(left);            
+            _direction = Vector2.left;
+        }
+        if (nextDirection == Vector2.right && _direction != Vector2.left)
+        {
+            if (_direction != Vector2.right)
+                PlaySound(right);            
+            _direction = Vector2.right;
+        }
+
         _previousPositions.Insert(0, transform.position);
 
         transform.position = new Vector3(
@@ -114,32 +164,63 @@ public class SnakeBehavior : MonoBehaviour
                 _body[i].transform.position = _previousPositions[i - 1];
             }
         }
+
+        if (_body.Count % 10 == 0)
+        {
+            strobeCounter = !strobeCounter;
+
+            for (int i = 0; i < _body.Count; i++)
+            {
+                if (strobeCounter)
+                {
+                    _body[i].GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
+                }
+                else
+                {
+                    _body[i].GetComponent<SpriteRenderer>().color = new Color(0,0,0,0);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _body.Count; i++)
+                _body[i].GetComponent<SpriteRenderer>().color = new Color(0,1,0,1);
+        }
+
+        // Increase speed when the body count is one more than a multiple of 10
+        if (_body.Count > 2 && _body.Count % 10 == 1 && !hasIncreasedSpeed)
+        {
+            IncreaseSpeed();
+            hasIncreasedSpeed = true;
+        }
+
+        // Reset the flag if the body count is not one more than a multiple of 10
+        if (_body.Count % 10 != 1)
+        {
+            hasIncreasedSpeed = false;
+        }
     }
 
     public void Expand()
     {
         ScoreManager.instance.AddScore(1);
         Vector3 newPosition = _previousPositions.Count > 0 ? _previousPositions[_previousPositions.Count - 1] : transform.position;
-        GameObject newBodyPart = Instantiate(bodyPrefab, newPosition, UnityEngine.Quaternion.identity);
+        GameObject newBodyPart = Instantiate(bodyPrefab, newPosition, Quaternion.identity);
         _body.Add(newBodyPart);
 
         if (_previousPositions.Count < _body.Count)
         {
             _previousPositions.Add(newPosition);
         }
-
-        IncreaseSpeed();
     }
 
     private void IncreaseSpeed()
     {
-        moveInterval *= 0.98f;
+        moveInterval *= 0.9f;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"Snake collided with: {other.gameObject.name} tagged as: {other.tag}");
-
         if (other.CompareTag("Food") && isHead)
         {
             Expand();
@@ -150,9 +231,30 @@ public class SnakeBehavior : MonoBehaviour
             PlaySound(lose);
         }
     }
+    
     void PlaySound(AudioClip clip)
     {
-        _source.clip = clip;
-        _source.Play();
+        AudioSource source = GetAvailableAudioSource();
+        if (source != null)
+        {
+            source.clip = clip;
+            source.Play();
+        }
+    }
+
+    AudioSource GetAvailableAudioSource()
+    {
+        foreach (AudioSource source in _sources)
+        {
+            if (!source.isPlaying)
+            {
+                return source;
+            }
+        }
+        
+        AudioSource newSource = gameObject.AddComponent<AudioSource>();
+        Array.Resize(ref _sources, _sources.Length + 1);
+        _sources[_sources.Length - 1] = newSource;
+        return newSource;
     }
 }

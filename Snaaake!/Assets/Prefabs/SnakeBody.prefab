@@ -130,7 +130,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.35, y: 0.26}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!50 &1171631054105901742
 Rigidbody2D:
@@ -175,6 +175,11 @@ MonoBehaviour:
   _downDirection: 274
   _leftDirection: 276
   _rightDirection: 275
+  lose: {fileID: 0}
+  up: {fileID: 0}
+  down: {fileID: 0}
+  left: {fileID: 0}
+  right: {fileID: 0}
   moveInterval: 0.0539
   bodyPrefab: {fileID: 0}
   gameOverManager: {fileID: 0}

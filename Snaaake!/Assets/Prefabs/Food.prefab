@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f621021f147ec4f778ff96ce32dd7155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eat: {fileID: 8300000, guid: 6758a6fca33bf4e39ad6b5eea4b0d51c, type: 3}
+  eat: {fileID: 8300000, guid: 87e18ad23bacd45ab99770ebd6580c63, type: 3}
   boundary: {fileID: 0}
 --- !u!82 &9167549616735117872
 AudioSource:
@@ -156,8 +156,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 6758a6fca33bf4e39ad6b5eea4b0d51c, type: 3}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: 87e18ad23bacd45ab99770ebd6580c63, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

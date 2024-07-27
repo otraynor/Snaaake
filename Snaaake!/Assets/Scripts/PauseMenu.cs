@@ -5,19 +5,21 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GameObject scoreText;
-    public static bool IsPaused;
+    public GameObject highScoreText;
+    private bool isPaused;
 
     void Start()
     {
-        pauseMenu.SetActive(false); 
-        scoreText.SetActive(true);
+        Time.timeScale = 1.0f;
+        pauseMenu.SetActive(false);
+        scoreText.SetActive(true); 
     }
-    
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (IsPaused)
+            if (isPaused)
             {
                 ResumeGame();
             }
@@ -30,33 +32,31 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame()
     {
-        Debug.Log("Game Paused");
         pauseMenu.SetActive(true);
-        scoreText.SetActive(false); // Hide score text
+        scoreText.SetActive(false);
+        highScoreText.SetActive(false);
         Time.timeScale = 0f;
-        IsPaused = true;
+        isPaused = true;
     }
 
     public void ResumeGame()
     {
-        Debug.Log("Game Resumed");
         pauseMenu.SetActive(false);
         scoreText.SetActive(true);
+        highScoreText.SetActive(true);
         Time.timeScale = 1f;
-        IsPaused = false;
-    }
-
-    public void GoToMainMenu()
-    {
-        Debug.Log("Going to Main Menu");
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
-        IsPaused = false;
+        isPaused = false;
     }
 
     public void QuitGame()
     {
-        Debug.Log("Quitting Game");
         Application.Quit();
+    }
+
+    public void GoToMainMenu()
+    { ;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
+        isPaused = false;
     }
 }

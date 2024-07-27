@@ -2617,9 +2617,9 @@ Material:
     - _FaceDilate: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
-    - _GlowInner: 0.693
-    - _GlowOffset: 0.128
-    - _GlowOuter: 0.871
+    - _GlowInner: 0.367
+    - _GlowOffset: -0.437
+    - _GlowOuter: 1
     - _GlowPower: 0
     - _GradientScale: 6
     - _LightAngle: 3.1416
@@ -2647,7 +2647,7 @@ Material:
     - _TextureHeight: 512
     - _TextureWidth: 512
     - _UnderlayDilate: -0.301
-    - _UnderlayOffsetX: 0
+    - _UnderlayOffsetX: 0.099
     - _UnderlayOffsetY: 0
     - _UnderlaySoftness: 0.081
     - _VertexOffsetX: 0

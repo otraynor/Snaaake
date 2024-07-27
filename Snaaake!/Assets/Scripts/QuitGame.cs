@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,19 +8,12 @@ using UnityEditor;
 #endif 
 public class QuitGame : MonoBehaviour
 {
-    void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            QuitSnaaake();
-        }
-    }
-
-    void QuitSnaaake()
+    public void QuitSnake()
     {
         #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
         #else 
+        Application.Quit();
         #endif
     }
 }
