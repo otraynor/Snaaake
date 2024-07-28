@@ -2170,10 +2170,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 989912903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -261.50003, y: 209.38501}
-  m_SizeDelta: {x: -633.00006, y: -414.77002}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 138.49997, y: -15.61499}
+  m_SizeDelta: {x: 166.99994, y: 35.22998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1207258103
 MonoBehaviour:
@@ -3169,6 +3169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1207258103}
   loseText: {fileID: 1275760089}
+  highScoreText: {fileID: 247333689}
 --- !u!114 &1822695966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3182,8 +3183,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOver: {fileID: 236798000}
-  scoreText: {fileID: 1275760087}
-  highScoreText: {fileID: 247333687}
+  scoreText: {fileID: 1207258103}
+  highScoreText: {fileID: 247333689}
 --- !u!114 &1822695967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3223,8 +3224,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d33612a70d55948e58acea90d0b73225, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 1207258103}
-  loseText: {fileID: 1275760089}
   Object: {fileID: 2625750531074628212, guid: 164cedf55d416404e838aa0f494c41a4, type: 3}
 --- !u!114 &1822695970
 MonoBehaviour:
@@ -3246,7 +3245,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822695962}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dcd82c3ab4a084e1ba2957ac85f05c13, type: 3}
   m_Name: 

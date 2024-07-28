@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                Debug.Log("GM Null Error");
+              //  Debug.Log("GM Null Error");
             }
             return _instance;
         }

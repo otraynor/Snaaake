@@ -9,8 +9,6 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class LoadGame : MonoBehaviour
 {
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI loseText;
     public GameObject Object;
     public static Transform ObjectsParent;
 

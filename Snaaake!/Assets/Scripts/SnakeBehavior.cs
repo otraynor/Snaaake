@@ -37,21 +37,17 @@ public class SnakeBehavior : MonoBehaviour
     
     private void Start()
     {
-        Debug.Log("SnakeBehavior Start Method Called");
-
         _sources = GetComponents<AudioSource>();
 
         if (Body.Count == 0)
         {
             isHead = true;
-            Debug.Log("This is the head segment");
             Body.Add(gameObject);
             _previousPositions.Add(transform.position);
         }
         else
         {
             isHead = false;
-            Debug.Log("This is the Body");
         }
     }
 
@@ -69,15 +65,11 @@ public class SnakeBehavior : MonoBehaviour
         {
             isHead = false;
         }
-
-        Debug.Log($"Snake initialized. isHead: {isHead}");
     }
     private void Update()
     {
-        Debug.Log("SnakeBehavior Update Method Called");
         if (!isHead)
         {
-            Debug.Log("Not Head Segment");
             return;
         }
 
@@ -96,13 +88,11 @@ public class SnakeBehavior : MonoBehaviour
         if (Input.GetKeyDown(_upDirection))
         {
             nextDirection = Vector2.up;
-            Debug.Log("up");
         }
 
         if (Input.GetKeyDown(_downDirection))
         {
             nextDirection = Vector2.down;
-            Debug.Log("down");
         }
 
         if (Input.GetKeyDown(_leftDirection))
@@ -118,7 +108,6 @@ public class SnakeBehavior : MonoBehaviour
     
     private void Move()
     {
-        Debug.Log("move being called");
         if (nextDirection == Vector2.up && _direction != Vector2.down)
         {
             if (_direction != Vector2.up)
