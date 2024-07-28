@@ -4,16 +4,16 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager instance;
-    public int score = 0;
+    public static ScoreManager Instance;
+    public static int score = 0;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI loseText;
-
+    
     void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
@@ -36,4 +36,12 @@ public class ScoreManager : MonoBehaviour
     {
         return score;
     }
+
+    public void ResetScore()
+    {
+        score = 0;
+        scoreText.text = "Score: " + score;
+        loseText.text = "Score: " + score;
+    }
+
 }

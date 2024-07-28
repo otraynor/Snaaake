@@ -20,7 +20,7 @@ public class SnakeBehavior : MonoBehaviour
     
     [Range(0.0167f, 0.14f)] public float moveInterval = 0.14f;
 
-    private static List<GameObject> _body = new List<GameObject>();
+    public static List<GameObject> Body = new List<GameObject>();
     private List<Vector3> _previousPositions = new List<Vector3>();
 
     public GameObject bodyPrefab;
@@ -41,17 +41,17 @@ public class SnakeBehavior : MonoBehaviour
 
         _sources = GetComponents<AudioSource>();
 
-        if (_body.Count == 0)
+        if (Body.Count == 0)
         {
             isHead = true;
             Debug.Log("This is the head segment");
-            _body.Add(gameObject);
+            Body.Add(gameObject);
             _previousPositions.Add(transform.position);
         }
         else
         {
             isHead = false;
-            Debug.Log("This is not the head segment");
+            Debug.Log("This is the Body");
         }
     }
 
@@ -59,10 +59,10 @@ public class SnakeBehavior : MonoBehaviour
     {
         _sources = GetComponents<AudioSource>();
 
-        if (_body.Count == 0)
+        if (Body.Count == 0)
         {
             isHead = true;
-            _body.Add(gameObject);
+            Body.Add(gameObject);
             _previousPositions.Add(transform.position);
         }
         else
@@ -152,50 +152,50 @@ public class SnakeBehavior : MonoBehaviour
             1.0f
         );
 
-        if (_previousPositions.Count > _body.Count)
+        if (_previousPositions.Count > Body.Count)
         {
             _previousPositions.RemoveAt(_previousPositions.Count - 1);
         }
 
-        for (int i = 1; i < _body.Count; i++)
+        for (int i = 1; i < Body.Count; i++)
         {
             if (i - 1 < _previousPositions.Count)
             {
-                _body[i].transform.position = _previousPositions[i - 1];
+                Body[i].transform.position = _previousPositions[i - 1];
             }
         }
 
-        if (_body.Count % 10 == 0)
+        if (Body.Count % 10 == 0)
         {
             strobeCounter = !strobeCounter;
 
-            for (int i = 0; i < _body.Count; i++)
+            for (int i = 0; i < Body.Count; i++)
             {
                 if (strobeCounter)
                 {
-                    _body[i].GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
+                    Body[i].GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
                 }
                 else
                 {
-                    _body[i].GetComponent<SpriteRenderer>().color = new Color(0,0,0,0);
+                    Body[i].GetComponent<SpriteRenderer>().color = new Color(0,0,0,0);
                 }
             }
         }
         else
         {
-            for (int i = 0; i < _body.Count; i++)
-                _body[i].GetComponent<SpriteRenderer>().color = new Color(0,1,0,1);
+            for (int i = 0; i < Body.Count; i++)
+                Body[i].GetComponent<SpriteRenderer>().color = new Color(0,1,0,1);
         }
 
         // Increase speed when the body count is one more than a multiple of 10
-        if (_body.Count > 2 && _body.Count % 10 == 1 && !hasIncreasedSpeed)
+        if (Body.Count > 2 && Body.Count % 10 == 1 && !hasIncreasedSpeed)
         {
             IncreaseSpeed();
             hasIncreasedSpeed = true;
         }
 
         // Reset the flag if the body count is not one more than a multiple of 10
-        if (_body.Count % 10 != 1)
+        if (Body.Count % 10 != 1)
         {
             hasIncreasedSpeed = false;
         }
@@ -203,12 +203,12 @@ public class SnakeBehavior : MonoBehaviour
 
     public void Expand()
     {
-        ScoreManager.instance.AddScore(1);
+        ScoreManager.Instance.AddScore(1);
         Vector3 newPosition = _previousPositions.Count > 0 ? _previousPositions[_previousPositions.Count - 1] : transform.position;
-        GameObject newBodyPart = Instantiate(bodyPrefab, newPosition, Quaternion.identity);
-        _body.Add(newBodyPart);
+        GameObject newBodyPart = Instantiate(bodyPrefab, newPosition, Quaternion.identity, LoadGame.ObjectsParent);
+        Body.Add(newBodyPart);
 
-        if (_previousPositions.Count < _body.Count)
+        if (_previousPositions.Count < Body.Count)
         {
             _previousPositions.Add(newPosition);
         }
@@ -227,7 +227,7 @@ public class SnakeBehavior : MonoBehaviour
         }
         else if (other.CompareTag("Wall"))
         {
-            gameOverManager.GameOver();
+            GameOverManager.Instance.GameOver();
             PlaySound(lose);
         }
     }

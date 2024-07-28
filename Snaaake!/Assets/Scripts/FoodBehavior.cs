@@ -7,7 +7,7 @@ public class FoodBehavior : MonoBehaviour
 {
     private AudioSource _source;
     [SerializeField] private AudioClip eat;
-    public BoxCollider2D boundary;
+    public Transform boundary;
     private SpriteRenderer spriteRenderer;
     private bool isStrobing = false;
     private float strobeTimer = 0f;
@@ -27,7 +27,7 @@ public class FoodBehavior : MonoBehaviour
 
     private void StrobeCheck()
     {
-        if (ScoreManager.instance.GetScore() % 10 == 8)
+        if (ScoreManager.Instance.GetScore() % 10 == 8)
         {
             if (!isStrobing)
             {
@@ -70,7 +70,7 @@ public class FoodBehavior : MonoBehaviour
     
     private void RandomizePosition()
     {
-        Bounds bounds = boundary.bounds;
+        Bounds bounds = boundary.GetComponent<BoxCollider2D>().bounds;
         Vector3 newPosition;
         Collider2D[] colliders;
         do
